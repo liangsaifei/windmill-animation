@@ -4,7 +4,7 @@
       <sf.widget.WindmillView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:view_width="60dp" /> //暂时没有想到好办法，因为图片要动态计算尺寸。
+            app:view_width="60dp" /> //初始化控件宽度。layout_width 没有办法用 暂时没有想到好办法，因为图片要动态计算尺寸。
 
 #![image](https://github.com/liangsaifei/windmill-animation/blob/master/r.gif) 
 
