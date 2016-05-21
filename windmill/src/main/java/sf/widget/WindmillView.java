@@ -22,6 +22,8 @@ import sf.singlewindmillanimation.R;
 public class WindmillView extends View {
 
 
+   
+
     private int mHeight;
     private int mWidth;
     private Bitmap littleBallBitmap;
@@ -43,13 +45,27 @@ public class WindmillView extends View {
         init(context, attrs);
     }
 
-    private void init(Context context, AttributeSet attrs) {
+    public WindmillView(Context context) {
+        super(context);
+        mWidth = (int) dip(100);
+        init(context);
+    }
 
+    public WindmillView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context, attrs);
+    }
+
+    private void init(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.WindmillView);
         mWidth = (int) a.getDimension(R.styleable.WindmillView_view_width, dip(100));
 
         a.recycle();
 
+        init(context);
+    }
+
+    private void init(Context context) {
         littleBallBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.little_ball);
 
         windMillItemBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.windmill_item);
@@ -73,20 +89,18 @@ public class WindmillView extends View {
     }
 
     float sweepDegrees = 360f;
-    float currDegress;
+    private float currentDegrees;
 
     private void initAnimation() {
-        ObjectAnimator animator = new ObjectAnimator();
+        ValueAnimator animator = ValueAnimator.ofFloat(0, sweepDegrees);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                currDegress = (float) animation.getAnimatedValue();
+                currentDegrees = (float) animation.getAnimatedValue();
                 invalidate();
             }
         });
 
-
-        animator.setFloatValues(0, sweepDegrees);
         animator.setDuration(5000);
         animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.setInterpolator(new LinearInterpolator());
@@ -117,9 +131,9 @@ public class WindmillView extends View {
 
         for (int i = 0; i < 3; i++) {
             canvas.rotate(120, mWidth / 2, mHeight / 3);
-            canvas.rotate(currDegress, mWidth / 2, mHeight / 3);
+            canvas.rotate(currentDegrees, mWidth / 2, mHeight / 3);
             canvas.drawBitmap(windMillItemBitmap, littleBallBitmap.getWidth() / 2, mHeight / 3 - littleBallBitmap.getWidth() / 2, paint);
-            canvas.rotate(-currDegress, mWidth / 2, mHeight / 3);
+            canvas.rotate(-currentDegrees, mWidth / 2, mHeight / 3);
 
         }
         canvas.restore();
